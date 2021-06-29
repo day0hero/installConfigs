@@ -1,0 +1,40 @@
+ apiVersion: v1
+ baseDomain: ## DNS zone to use: redhat.local ##
+ controlPlane:
+   hyperthreading: Enabled
+   name: master
+   platform:
+     azure:
+       osDisk:
+         diskSizeGB: 256
+       type: Standard_D8s_v3
+   replicas: 3
+ compute:
+ - hyperthreading: Enabled
+   name: worker
+   platform:
+     azure:
+       type: Standard_D2s_v3
+       osDisk:
+         diskSizeGB: 256
+   replicas: 3
+ metadata:
+   name: ##cluster_name: ocp, cluster, <customer_name>
+ networking:
+   clusterNetwork:
+   - cidr: 10.128.0.0/14 ## Network that Pods use
+     hostPrefix: 23
+   machineNetwork:
+   - cidr: 10.4.0.0/16 ## Must enapsulate subnets defined below
+   networkType: OpenShiftSDN
+   serviceNetwork:
+   - 172.30.0.0/16 ## Service network 
+ platform:
+   azure:
+     region: usgovtexas ## MAG Region to use 
+     baseDomainResourceGroupName: ## Name of Resource Group to deploy in
+     cloudName: AzureUSGovernmentCloud
+ pullSecret: '{"auths":{""{}}}'
+ fips: false
+ sshKey: ssh-rsa AAAAB3NzaC1yc....
+ publish: External
